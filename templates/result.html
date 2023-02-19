@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div style="text-align: center;">
+        <img src="static/assets/img/logo.webp" width="256" height="256" alt="Logo"/>
+
+        <h1>{% block title %} Result {% endblock %}</h1>
+
+        <h2>{{ result['title'] }}</h2>
+
+        <video controls>
+            <source src="{{ result['video_url'] }}" type="video/mp4">
+        </video>
+
+        <p><a href="/">&larr; Search another video</a></p>
+    </div>
+
+    
+{% endblock %}

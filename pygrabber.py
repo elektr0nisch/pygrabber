@@ -1,24 +1,18 @@
-import argparse
+from flask import Flask, render_template, request
+from pymediathek import MediathekOptions, find_programme
 
-def download(args):
-    url = args.input[0]
-    target_path = args.output[0]
+import aiohttp
 
-    print(f"Downloading media from {url} to {target_path} ...")
+app = Flask(__name__)
 
-    
+session = aiohttp.ClientSession()
 
-def main():
-    parser = argparse.ArgumentParser(description = "Open-source media grabber")
-    parser.add_argument("-i", "--input", type = str, nargs = 1, metavar = 'url', help = "URL of the media to be grabbed")
-    parser.add_argument("-o", "--output", type = str, nargs = 1, metavar = 'url', help = "Path for saving the grabbed media")
+@app.route('/', methods=('GET', 'POST'))
+async def index():
+    if request.method == 'POST':
+        url = request.form['url']
+        programme = await find_programme(field='website_url', target_value=url, options=MediathekOptions(working_directory="C:\\test", http_session=session))
+        if programme:
+            return render_template('result.html', result=programme)
 
-    args = parser.parse_args()
-
-    print(args)
-
-    if args != None:
-        download(args)
-
-if __name__ == "__main__":
-    main()
+    return render_template('index.html')
